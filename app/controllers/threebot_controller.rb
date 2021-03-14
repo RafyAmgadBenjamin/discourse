@@ -23,32 +23,28 @@ class ThreebotController < ApplicationController
       redirect_to "/"
     end
 
-    # net = Net::HTTP.new("127.0.0.1", 5000)
-    # net.use_ssl = false
-    # res = net.get("/pub_key")
-    # res = Net::HTTP.get(@@OAUTHCentralURL, '/pubkey') # => String
     uri = @@OAUTHCentralURL + '/pubkey'
-    puts "##########################3 the URI"
-    puts uri
-    # res = URI.open(uri).read
     uri = URI(uri)
     res = Net::HTTP.get_response(uri)
-    # if res.code == "301"
-    #   res = Net::HTTP.get_response(URI.parse(res['location']))
-    # end
-    puts "#################The res"
-    puts res
+    
     if res.code != "200"
         return render json: {"message": "can not get pelleptic ublic key for this app"}, status: res.code
     end
     data = JSON.load(res.body)
-    pk = data['pk']
-    state = data['state']
+    pk = data['publickey']
+    # TODO Genereate UUID and replace - ''
+    state = "9d98da8c84b911eb8dcd0242ac130003"
+    puts "data"
+    puts data
+    puts "public key"
+    puts pk
+    puts "params"
+    puts request
     defaultParams = {
         :appid => request.host_with_port,
         :scope => JSON.generate({:user=> true, :email => true}),
-        :publickey => pk,
-        :redirecturl => '/threebot/callback',
+        :publickey => pk.encode("UTF-8"),
+        :redirecturl => 'threebot/callback',
         :state => state
     }
     session[:authState] = defaultParams[:state]
@@ -61,9 +57,12 @@ class ThreebotController < ApplicationController
         Rails.logger.warn 'Login attempt canceled by user'
         return render json: {"message": "Login cancelled by user"}, status: 400
     end
-    net = Net::HTTP.new("127.0.0.1", 5000)
-    net.use_ssl = false
-    res = net.get("/data?#{request.query_parameters.to_query}")
+    
+    uri = @@OAUTHCentralURL + '/verify'
+    uri = URI(@@OAUTHCentralURL + '/verify')
+    data = request.query_parameters["signedAttempt"]
+    
+    res = Net::HTTP.post_form(uri,'signedAttempt' => data,'state' => '9d98da8c84b911eb8dcd0242ac130003')
 
     if res.code != "200"
         return render json: JSON.load(res.body), status: res.code

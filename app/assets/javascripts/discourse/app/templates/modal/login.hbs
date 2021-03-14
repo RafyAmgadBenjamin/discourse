@@ -74,16 +74,17 @@ externalLogin=(action "externalLogin")}}
   disabled=loginDisabled
   class="btn btn-large btn-primary"}}
   {{/unless}}
+
   {{#unless showSecurityKey }}
   {{d-button
   action=(action "tflogin")
   id="tflogin-button"
-  form="login-form"
   icon="unlock"
-  label=loginButtonLabel
+  label=tfLoginButtonLabel
   disabled=loginDisabled
   class="btn btn-large btn-secondary"}}
   {{/unless}}
+
 
   {{#if showSignupLink}}
   {{d-button

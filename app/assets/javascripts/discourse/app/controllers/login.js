@@ -93,6 +93,10 @@ export default Controller.extend(ModalFunctionality, {
   loginButtonLabel(loggingIn) {
     return loggingIn ? "login.logging_in" : "login.title";
   },
+  @discourseComputed("loggingIn")
+  tfLoginButtonLabel(loggingIn) {
+    return loggingIn ? "tflogin.logging_in" : "tflogin.title";
+  },
 
   loginDisabled: or("loggingIn", "loggedIn"),
 
@@ -109,140 +113,9 @@ export default Controller.extend(ModalFunctionality, {
   },
 
   actions: {
-    tflogin() {
-      if (this.loginDisabled) {
-        return;
-      }
 
-      if (isEmpty(this.loginName) || isEmpty(this.loginPassword)) {
-        this.flash(I18n.t("login.blank_username_or_password"), "error");
-        return;
-      }
-
-      this.set("loggingIn", true);
-
-      // ajax("/threebot/login", {
-      //   type: "POST",
-      //   data: {
-      //     login: this.loginName,
-      //     password: this.loginPassword,
-      //     second_factor_token:
-      //       this.securityKeyCredential || this.secondFactorToken,
-      //     second_factor_method: this.secondFactorMethod,
-      //     timezone: moment.tz.guess(),
-      //   },
-      // }).then(
-      //   (result) => {
-      //     // Successful login
-      //     if (result && result.error) {
-      //       this.set("loggingIn", false);
-
-      //       if (
-      //         (result.security_key_enabled || result.totp_enabled) &&
-      //         !this.secondFactorRequired
-      //       ) {
-      //         document.getElementById("modal-alert").style.display = "none";
-
-      //         this.setProperties({
-      //           otherMethodAllowed: result.multiple_second_factor_methods,
-      //           secondFactorRequired: true,
-      //           showLoginButtons: false,
-      //           backupEnabled: result.backup_enabled,
-      //           showSecondFactor: result.totp_enabled,
-      //           showSecurityKey: result.security_key_enabled,
-      //           secondFactorMethod: result.security_key_enabled
-      //             ? SECOND_FACTOR_METHODS.SECURITY_KEY
-      //             : SECOND_FACTOR_METHODS.TOTP,
-      //           securityKeyChallenge: result.challenge,
-      //           securityKeyAllowedCredentialIds: result.allowed_credential_ids,
-      //         });
-
-      //         // only need to focus the 2FA input for TOTP
-      //         if (!this.showSecurityKey) {
-      //           schedule("afterRender", () =>
-      //             document
-      //               .getElementById("second-factor")
-      //               .querySelector("input")
-      //               .focus()
-      //           );
-      //         }
-
-      //         return;
-      //       } else if (result.reason === "not_activated") {
-      //         this.send("showNotActivated", {
-      //           username: this.loginName,
-      //           sentTo: escape(result.sent_to_email),
-      //           currentEmail: escape(result.current_email),
-      //         });
-      //       } else if (result.reason === "suspended") {
-      //         this.send("closeModal");
-      //         bootbox.alert(result.error);
-      //       } else {
-      //         this.flash(result.error, "error");
-      //       }
-      //     } else {
-      //       this.set("loggedIn", true);
-      //       // Trigger the browser's password manager using the hidden static login form:
-      //       const hiddenLoginForm = document.getElementById(
-      //         "hidden-login-form"
-      //       );
-      //       const applyHiddenFormInputValue = (value, key) => {
-      //         if (!hiddenLoginForm) {
-      //           return;
-      //         }
-
-      //         hiddenLoginForm.querySelector(`input[name=${key}]`).value = value;
-      //       };
-
-      //       const destinationUrl = cookie("destination_url");
-      //       const ssoDestinationUrl = cookie("sso_destination_url");
-
-      //       applyHiddenFormInputValue(this.loginName, "username");
-      //       applyHiddenFormInputValue(this.loginPassword, "password");
-
-      //       if (ssoDestinationUrl) {
-      //         removeCookie("sso_destination_url");
-      //         window.location.assign(ssoDestinationUrl);
-      //         return;
-      //       } else if (destinationUrl) {
-      //         // redirect client to the original URL
-      //         removeCookie("destination_url");
-
-      //         applyHiddenFormInputValue(destinationUrl, "redirect");
-      //       } else {
-      //         applyHiddenFormInputValue(window.location.href, "redirect");
-      //       }
-
-      //       if (hiddenLoginForm) {
-      //         if (
-      //           navigator.userAgent.match(/(iPad|iPhone|iPod)/g) &&
-      //           navigator.userAgent.match(/Safari/g)
-      //         ) {
-      //           // In case of Safari on iOS do not submit hidden login form
-      //           window.location.href = hiddenLoginForm.querySelector(
-      //             "input[name=redirect]"
-      //           ).value;
-      //         } else {
-      //           hiddenLoginForm.submit();
-      //         }
-      //       }
-      //       return;
-      //     }
-      //   },
-      //   (e) => {
-      //     // Failed to login
-      //     if (e.jqXHR && e.jqXHR.status === 429) {
-      //       this.flash(I18n.t("login.rate_limit"), "error");
-      //     } else if (!areCookiesEnabled()) {
-      //       this.flash(I18n.t("login.cookies_error"), "error");
-      //     } else {
-      //       this.flash(I18n.t("login.error"), "error");
-      //     }
-      //     this.set("loggingIn", false);
-      //   }
-      // );
-
-      // return false;
+    tflogin(){
+      window.location = "threebot/login";
     },
     login() {
       if (this.loginDisabled) {

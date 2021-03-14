@@ -1649,6 +1649,10 @@ en:
       confirm_title: Continue to %{site_name}
       logging_in_as: Logging in as %{email}
       confirm_button: Finish Login
+    
+    tflogin:
+      title: "TF Log In"
+      logging_in: "Signing In..."
 
     login:
       title: "Log In"
