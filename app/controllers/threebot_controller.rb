@@ -209,7 +209,6 @@ class ThreebotController < ApplicationController
       attempt = JSON.parse(request.query_parameters["signedAttempt"])
       user_info = verify(attempt)
     rescue => err
-      raise
       Rails.logger.error "login verirification error: #{err.message}"
       flash[:danger] = err.message
       return redirect_to "/"
