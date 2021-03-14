@@ -11,7 +11,7 @@ Discourse::Application.configure do
   config.log_level = :info
 
   # Full error reports are disabled and caching is turned on
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # in profile mode we serve static assets
@@ -27,7 +27,7 @@ Discourse::Application.configure do
   config.assets.digest = true
 
   # Specifies the header that your server uses for sending files
-  config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
+  config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for nginx
 
   # we recommend you use mailcatcher https://github.com/sj26/mailcatcher
   config.action_mailer.smtp_settings = { address: "localhost", port: 1025 }
@@ -48,4 +48,8 @@ Discourse::Application.configure do
 
   # for profiling with perftools
   # config.middleware.use ::Rack::PerftoolsProfiler, default_printer: 'gif'
+
+  require "rbnacl"
+  require "base64"
+  config.signing_key = ENV["THREEBOT_KEY"] || Base64.strict_encode64(RbNaCl::SigningKey.generate.to_s)
 end

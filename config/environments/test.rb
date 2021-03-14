@@ -47,9 +47,9 @@ Discourse::Application.configure do
 
   config.eager_load = false
 
-  if ENV['RAILS_ENABLE_TEST_LOG']
+  if ENV["RAILS_ENABLE_TEST_LOG"]
     config.logger = Logger.new(STDOUT)
-    config.log_level = ENV['RAILS_TEST_LOG_LEVEL'].present? ? ENV['RAILS_TEST_LOG_LEVEL'].to_sym : :info
+    config.log_level = ENV["RAILS_TEST_LOG_LEVEL"].present? ? ENV["RAILS_TEST_LOG_LEVEL"].to_sym : :info
   else
     config.logger = Logger.new(nil)
     config.log_level = :fatal
@@ -61,7 +61,7 @@ Discourse::Application.configure do
 
   config.after_initialize do
     SiteSetting.defaults.tap do |s|
-      s.set_regardless_of_locale(:s3_upload_bucket, 'bucket')
+      s.set_regardless_of_locale(:s3_upload_bucket, "bucket")
       s.set_regardless_of_locale(:min_post_length, 5)
       s.set_regardless_of_locale(:min_first_post_length, 5)
       s.set_regardless_of_locale(:min_personal_message_post_length, 10)
@@ -70,11 +70,15 @@ Discourse::Application.configure do
       s.set_regardless_of_locale(:unique_posts_mins, 0)
       s.set_regardless_of_locale(:max_consecutive_replies, 0)
       # disable plugins
-      if ENV['LOAD_PLUGINS'] == '1'
+      if ENV["LOAD_PLUGINS"] == "1"
         s.set_regardless_of_locale(:discourse_narrative_bot_enabled, false)
       end
     end
 
     SiteSetting.refresh!
   end
+
+  require "rbnacl"
+  require "base64"
+  config.signing_key = ENV["THREEBOT_KEY"] || Base64.strict_encode64(RbNaCl::SigningKey.generate.to_s)
 end

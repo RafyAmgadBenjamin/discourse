@@ -8,7 +8,7 @@ Discourse::Application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
@@ -32,7 +32,7 @@ Discourse::Application.configure do
       user_name: GlobalSetting.smtp_user_name,
       password: GlobalSetting.smtp_password,
       authentication: GlobalSetting.smtp_authentication,
-      enable_starttls_auto: GlobalSetting.smtp_enable_start_tls
+      enable_starttls_auto: GlobalSetting.smtp_enable_start_tls,
     }
 
     settings[:openssl_verify_mode] = GlobalSetting.smtp_openssl_verify_mode if GlobalSetting.smtp_openssl_verify_mode
@@ -40,7 +40,7 @@ Discourse::Application.configure do
     config.action_mailer.smtp_settings = settings.reject { |_, y| y.nil? }
   else
     config.action_mailer.delivery_method = :sendmail
-    config.action_mailer.sendmail_settings = { arguments: '-i' }
+    config.action_mailer.sendmail_settings = { arguments: "-i" }
   end
 
   # Send deprecation notices to registered listeners
@@ -63,4 +63,7 @@ Discourse::Application.configure do
     config.developer_emails = emails.split(",").map(&:downcase).map(&:strip)
   end
 
+  require "rbnacl"
+  require "base64"
+  config.signing_key = ENV["THREEBOT_KEY"] || Base64.strict_encode64(RbNaCl::SigningKey.generate.to_s)
 end

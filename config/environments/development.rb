@@ -12,7 +12,7 @@ Discourse::Application.configure do
   config.eager_load = false
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
+  config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
 
   config.action_controller.asset_host = GlobalSetting.cdn_url
@@ -29,12 +29,12 @@ Discourse::Application.configure do
   config.assets.debug = false
 
   config.public_file_server.headers = {
-    'Access-Control-Allow-Origin' => '*'
+    "Access-Control-Allow-Origin" => "*",
   }
 
   # Raise an error on page load if there are pending migrations
   config.active_record.migration_error = :page_load
-  config.watchable_dirs['lib'] = [:rb]
+  config.watchable_dirs["lib"] = [:rb]
 
   config.handlebars.precompile = true
 
@@ -43,14 +43,14 @@ Discourse::Application.configure do
 
   config.action_mailer.raise_delivery_errors = true
 
-  config.log_level = ENV['DISCOURSE_DEV_LOG_LEVEL'] if ENV['DISCOURSE_DEV_LOG_LEVEL']
+  config.log_level = "warn" #ENV["DISCOURSE_DEV_LOG_LEVEL"] if ENV["DISCOURSE_DEV_LOG_LEVEL"]
 
-  if ENV['RAILS_VERBOSE_QUERY_LOGS'] == "1"
+  if ENV["RAILS_VERBOSE_QUERY_LOGS"] == "1"
     config.active_record.verbose_query_logs = true
   end
 
   if defined?(BetterErrors)
-    BetterErrors::Middleware.allow_ip! ENV['TRUSTED_IP'] if ENV['TRUSTED_IP']
+    BetterErrors::Middleware.allow_ip! ENV["TRUSTED_IP"] if ENV["TRUSTED_IP"]
 
     if defined?(Unicorn) && ENV["UNICORN_WORKERS"].to_i != 1
       # BetterErrors doesn't work with multiple unicorn workers. Disable it to avoid confusion
@@ -62,18 +62,18 @@ Discourse::Application.configure do
     config.load_mini_profiler = true
   end
 
-  if hosts = ENV['DISCOURSE_DEV_HOSTS']
+  if hosts = ENV["DISCOURSE_DEV_HOSTS"]
     config.hosts.concat(hosts.split(","))
   end
 
-  require 'middleware/turbo_dev'
+  require "middleware/turbo_dev"
   config.middleware.insert 0, Middleware::TurboDev
-  require 'middleware/missing_avatars'
+  require "middleware/missing_avatars"
   config.middleware.insert 1, Middleware::MissingAvatars
 
   config.enable_anon_caching = false
   if RUBY_ENGINE == "ruby"
-    require 'rbtrace'
+    require "rbtrace"
   end
 
   if emails = GlobalSetting.developer_emails
@@ -81,7 +81,7 @@ Discourse::Application.configure do
   end
 
   if defined?(Rails::Server) || defined?(Puma) || defined?(Unicorn)
-    require 'stylesheet/watcher'
+    require "stylesheet/watcher"
     STDERR.puts "Starting CSS change watcher"
     @watcher = Stylesheet::Watcher.watch
   end
@@ -101,9 +101,13 @@ Discourse::Application.configure do
       ActiveRecord::Base.logger = nil
     end
 
-    if ENV['BULLET']
+    if ENV["BULLET"]
       Bullet.enable = true
       Bullet.rails_logger = true
     end
+
+    require "rbnacl"
+    require "base64"
+    config.signing_key = ENV["THREEBOT_KEY"] || Base64.strict_encode64(RbNaCl::SigningKey.generate.to_s)
   end
 end
