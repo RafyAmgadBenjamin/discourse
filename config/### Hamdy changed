@@ -1,0 +1,31 @@
+### Hamdy changed 
+##### config/routes.rb
+added two routes one for threebot login and the other for call back 
+
+##### app/controllers/threebot_controller.rb
+Added new controller which will fire the request to the cenralized oauth service 
+
+#### config/locales/client.en.yml
+added the text will be used as a label on the button 
+
+
+
+Some changes in 
+app/assets/javascripts/discourse/routes/application.js.es6
+app/assets/javascripts/discourse/widgets/header.js.es6
+
+
+
+########################################################################33
+# Current path 
+### jsapp/app/templates/modal/login.hbs 
+the button exist which will call the action 
+
+### app/assets/javascripts/discourse/app/controllers/login.js
+the actions and call an ajax 
+
+
+### config/routes.rb
+the route in rail which will point to controller and a method in it
+
+

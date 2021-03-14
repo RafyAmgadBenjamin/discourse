@@ -352,6 +352,9 @@ Discourse::Application.routes.draw do
 
     resources :reviewable_claimed_topics
 
+    #TFConnect 
+    post "threebot/login" => "threebot#login"
+
     get "session/sso" => "session#sso"
     get "session/sso_login" => "session#sso_login"
     get "session/sso_provider" => "session#sso_provider"
