@@ -102,7 +102,7 @@ class ThreebotController < ApplicationController
 
     private_key = signing_key.to_private_key
     public_key = verify_key.to_public_key
-    box = RbNaCl::Boxes::Curve25519XSalsa20Poly1305.new(public_key, private_key)
+    box = RbNaCl::Box.new(public_key, private_key)
     decrypted = box.decrypt(nonce, ciphertext)
     JSON.parse(decrypted)
   end
