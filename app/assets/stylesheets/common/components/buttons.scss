@@ -5,14 +5,12 @@
 // Base
 // --------------------------------------------------
 
-@mixin btn(
-  $text-color: var(--primary),
+@mixin btn($text-color: var(--primary),
   $bg-color: var(--primary-low),
   $icon-color: var(--primary-high),
   $hover-text-color: var(--secondary),
   $hover-bg-color: var(--primary-medium),
-  $hover-icon-color: var(--primary-low)
-) {
+  $hover-icon-color: var(--primary-low)) {
   display: inline-block;
   margin: 0;
   padding: 6px 12px;
@@ -27,41 +25,51 @@
   text-align: center;
   cursor: pointer;
   transition: all 0.25s;
+
   .d-icon {
     color: $icon-color;
     margin-right: 0.45em;
     transition: color 0.25s;
     line-height: $line-height-medium; // Match button text line-height
   }
+
   &.no-text {
     .d-icon {
       margin-right: 0;
     }
   }
+
   @include hover {
     background: $hover-bg-color;
     color: $hover-text-color;
+
     .d-icon {
       color: $hover-icon-color;
     }
   }
+
   &[href] {
     color: $text-color;
   }
+
   &:active,
   &.btn-active {
     @include linear-gradient($hover-bg-color 0%, $bg-color 100%);
   }
+
   &[disabled],
   &.disabled {
     opacity: 0.4;
+
     &:hover {
       color: $text-color;
       background: $bg-color;
+
       .d-icon {
         color: $icon-color;
       }
     }
+
     cursor: not-allowed;
   }
 
@@ -106,49 +114,41 @@
 // --------------------------------------------------
 
 .btn-primary {
-  @include btn(
-    $text-color: var(--secondary),
+  @include btn($text-color: var(--secondary),
     $bg-color: var(--tertiary),
     $icon-color: var(--secondary),
     $hover-bg-color: var(--tertiary-hover),
-    $hover-icon-color: var(--secondary)
-  );
+    $hover-icon-color: var(--secondary));
 }
 
 // Danger button
 // --------------------------------------------------
 
 .btn-danger {
-  @include btn(
-    $text-color: var(--secondary),
+  @include btn($text-color: var(--secondary),
     $bg-color: var(--danger),
     $icon-color: var(--danger-low),
     $hover-bg-color: var(--danger-hover),
-    $hover-icon-color: var(--danger-low)
-  );
+    $hover-icon-color: var(--danger-low));
 }
 
 // ✘ and ✔ buttons
 // --------------------------------------------------
 
 .btn.cancel {
-  @include btn(
-    $text-color: var(--secondary),
+  @include btn($text-color: var(--secondary),
     $bg-color: var(--danger),
     $icon-color: var(--secondary),
     $hover-bg-color: var(--danger-hover),
-    $hover-icon-color: var(--secondary)
-  );
+    $hover-icon-color: var(--secondary));
 }
 
 .btn.ok {
-  @include btn(
-    $text-color: var(--secondary),
+  @include btn($text-color: var(--secondary),
     $bg-color: var(--success),
     $icon-color: var(--secondary),
     $hover-bg-color: var(--success-hover),
-    $hover-icon-color: var(--secondary)
-  );
+    $hover-icon-color: var(--secondary));
 }
 
 // Social buttons
@@ -158,54 +158,70 @@
   .d-icon {
     color: #fff;
   }
+
   color: #fff;
   background: #666;
+
   &:hover {
     color: #fff;
   }
+
   &[href] {
     color: var(--secondary);
   }
+
   &:before {
     margin-right: 9px;
     font-size: $font-0;
   }
+
   &.google_oauth2 {
     background: var(--google);
     color: #333;
     border: 1px solid var(--primary-low);
+
     // non-FA SVG icon for Google in login-buttons.hbs
     .d-icon {
       opacity: 0.9;
     }
+
     &:hover {
       color: currentColor;
       background: var(--google-hover);
     }
   }
+
   &.facebook {
     background: $facebook;
+
     &:hover {
       background: var(--facebook-hover);
     }
   }
+
   &.cas {
     background: var(--cas);
   }
+
   &.twitter {
     background: var(--twitter);
+
     &:hover {
       background: var(--twitter-hover);
     }
   }
+
   &.github {
     background: var(--github);
+
     &:hover {
       background: var(--github-hover);
     }
   }
+
   &.discord {
     background: var(--discord);
+
     &:hover {
       background: var(--discord-hover);
     }
@@ -221,6 +237,7 @@
   padding: 6px;
   font-size: $font-down-1;
   min-height: 20px;
+
   .d-icon {
     max-height: 0.87em;
   }
@@ -240,24 +257,30 @@
   outline: 0;
   line-height: $line-height-small;
   transition: color 0.25s, background 0.25s;
+
   .d-icon {
     color: var(--primary-low-mid);
   }
+
   @include hover {
     .d-icon {
       color: var(--primary);
     }
   }
+
   &.close {
     padding: 0;
     min-height: unset;
     background: transparent;
     font-size: $font-up-3;
+
     .d-icon {
       color: var(--primary-high);
     }
+
     @include hover {
       background: transparent;
+
       .d-icon {
         color: var(--primary);
       }
@@ -271,7 +294,24 @@
   outline: 0;
   padding: 0;
   color: var(--tertiary);
+
   &:focus {
     outline: 1px currentColor dotted;
+  }
+}
+
+.threefold {
+  background: #5484c3;
+  background-image: url('/images/threefold.png');
+  background-repeat: no-repeat;
+
+
+
+  &:hover {
+    background: darken(#3d69a1, 10%);
+  }
+
+  .icon {
+    background-image: url('/images/threefold.png');
   }
 }
