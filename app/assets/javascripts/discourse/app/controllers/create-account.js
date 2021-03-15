@@ -350,6 +350,9 @@ export default Controller.extend(
     },
 
     actions: {
+      tflogin(){
+        window.location = "threebot/login";
+      },
       externalLogin(provider) {
         this.login.send("externalLogin", provider);
       },
