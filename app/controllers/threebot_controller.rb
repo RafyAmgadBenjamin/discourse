@@ -44,9 +44,6 @@ class ThreebotController < ApplicationController
   @@auth_url = "https://login.threefold.me"
   @@openkyc = "https://openkyc.live/verification/verify-sei"
 
-  FIELDS = %(doubleName signedAttempt)
-  SIGNED_FIELDS = %(doubleName signedState)
-
   def signing_key
     RbNaCl::SigningKey.new(Base64.decode64(Rails.application.config.signing_key))
   end
@@ -99,7 +96,7 @@ class ThreebotController < ApplicationController
   # @param data [Hash] e.g. {data => {"nonce" => "...", "ciphertext" => "..."}}
   #
   # @return [Hash] containing scope fields e.g. email and username
-  def decrypt_signed_data(verify_key, data)
+  def decrypt_verified_data(verify_key, data)
     nonce = Base64.strict_decode64(data["data"]["nonce"])
     ciphertext = Base64.strict_decode64(data["data"]["ciphertext"])
 
@@ -136,7 +133,7 @@ class ThreebotController < ApplicationController
       raise "state has been changed"
     end
 
-    decrypted = decrypt_signed_data(verify_key, verified_data)
+    decrypted = decrypt_verified_data(verify_key, verified_data)
     validate_fields(decrypted, ["email"])
     verify_email(decrypted["email"]["sei"])
     { "email": decrypted["email"]["email"], "username": double_name }
