@@ -303,12 +303,22 @@
 .threefold {
   background: #5484c3;
   background-image: url('/images/threefold.png');
+  background-size: 17px 17px;
   background-repeat: no-repeat;
+  background-position: 4px 8px;
+  padding-left: 25px;
 
 
 
   &:hover {
-    background: darken(#3d69a1, 10%);
+    background: darken(#3d69a1, 10%) !important;
+    // background: darken(#3d69a1, 10%) !important;
+    background-image: url('/images/threefold.png') !important;
+    background-size: 17px 17px !important;
+    background-repeat: no-repeat !important;
+    background-position: 4px 8px !important;
+    padding-left: 25px !important;
+
   }
 
   .icon {
